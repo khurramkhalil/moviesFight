@@ -3,25 +3,20 @@
 const fetchData = async (searchTerm) => {
   const response = await axios.get('http://www.omdbapi.com/', {
     params: {
-      apikey: '62d85de2',
-      s: searchTerm,
-      // i: "tt0848228"
+      apikey: '62d85de2', s: searchTerm, // i: "tt0848228"
     }
   });
-  console.log(response.data)
-};
 
-
-let timeoutId;
-const onInput = (event) => {
-  if (timeoutId) {
-    clearTimeout(timeoutId);
-  }
-  timeoutId = setTimeout(() => {
-    fetchData(event.target.value)
-  }, 500)
-
+  return response.data.Search;
 };
 
 const input = document.querySelector('input');
-input.addEventListener('input', onInput)
+
+
+const onInput = async (event) => {
+  const movies = await fetchData(event.target.value)
+  console.log(movies)
+};
+
+
+input.addEventListener('input', debounce(onInput, 500))
